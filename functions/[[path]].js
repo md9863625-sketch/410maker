@@ -1,3 +1,3 @@
 export async function onRequest() {
-  return new Response("Gone", { status: 410 });
+  return new Response(null, { status: 410 });
 }
