@@ -1,3 +1,5 @@
-export async function onRequest() {
-  return new Response("null", { status: 410 });
-}
+addEventListener('fetch', event => {
+  event.respondWith(
+    new Response(null, { status: 410 })
+  );
+});
