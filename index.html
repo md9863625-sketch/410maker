@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>YouTube Embed URL Generator</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f3f3f3; padding: 30px; }
+    .box { background: #fff; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 10px; }
+    .preview { margin-top: 20px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>YouTube Embed URL Generator</h2>
+    <p>Enter any YouTube video link:</p>
+
+    <input type="text" id="ytInput" placeholder="https://www.youtube.com/watch?v=VIDEOID">
+    <button onclick="generate()">Generate</button>
+
+    <h3>Results:</h3>
+    <label>Video ID:</label>
+    <input id="videoId" readonly>
+
+    <label>Embed URL:</label>
+    <input id="embedUrl" readonly>
+
+    <label>Privacy (No-Cookie) Embed URL:</label>
+    <input id="nocookieUrl" readonly>
+
+    <label>Thumbnail URL:</label>
+    <input id="thumbUrl" readonly>
+
+    <div class="preview" id="previewBox"></div>
+</div>
+
+<script>
+function generate() {
+    let url = document.getElementById("ytInput").value.trim();
+    let id = "";
+
+    // Extract ID from multiple URL formats
+    const patterns = [
+        /v=([^&]+)/,                 // normal ?
+        /youtu\.be\/([^?]+)/,       // short link
+        /embed\/([^?]+)/,           // embed link
+        /shorts\/([^?]+)/           // shorts
+    ];
+
+    for (let p of patterns) {
+        let match = url.match(p);
+        if (match) { id = match[1]; break; }
+    }
+
+    if (!id) {
+        alert("Invalid YouTube link.");
+        return;
+    }
+
+    let embed = `https://www.youtube.com/embed/${id}`;
+    let nocookie = `https://www.youtube-nocookie.com/embed/${id}`;
+    let thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+
+    document.getElementById("videoId").value = id;
+    document.getElementById("embedUrl").value = embed;
+    document.getElementById("nocookieUrl").value = nocookie;
+    document.getElementById("thumbUrl").value = thumb;
+
+    document.getElementById("previewBox").innerHTML =
+        `<iframe width="500" height="280" src="${embed}" frameborder="0" allowfullscreen></iframe>`;
+}
+</script>
+
+</body>
+</html>
